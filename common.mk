@@ -9,12 +9,15 @@ SRPM = $(NVR).src.rpm
 URL = "http://$(FEDORA_USER).fedorapeople.org/uploads/$(SRPM)"
 
 help:
-	@echo "targets: srpm local upload copr verrel"
+	@echo "targets: prep srpm local upload copr verrel"
 
 verrel:
 	@echo $(NVR)
 
 srpm: $(SRPM)
+
+prep: $(NAME).spec
+	rpmbuild -bp $(NAME).spec
 
 $(SRPM): $(NAME).spec
 	rpmbuild -bs $(NAME).spec
