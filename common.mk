@@ -9,7 +9,7 @@ SRPM = $(NVR).src.rpm
 URL = "http://$(FEDORA_USER).fedorapeople.org/uploads/$(SRPM)"
 
 help:
-	@echo "targets: prep srpm local upload copr verrel"
+	@echo "targets: prep srpm local upload copr koji verrel"
 
 verrel:
 	@echo $(NVR)
@@ -28,6 +28,9 @@ local: $(NAME).spec
 upload: $(SRPM)
 	scp $(SRPM) $(FEDORA_USER)@fedorapeople.org:uploads/
 	@echo $(URL)
+
+koji: $(SRPM)
+	koji build --scratch rawhide $(SRPM)
 
 copr:
 	copr-cli build $(COPR_REPO) $(URL)
