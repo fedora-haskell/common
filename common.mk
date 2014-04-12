@@ -25,12 +25,14 @@ $(SRPM): $(NAME).spec
 local: $(NAME).spec
 	rpmbuild -ba $(NAME).spec
 
+koji: $(SRPM)
+	koji build --scratch rawhide $(SRPM)
+
+ifneq ($(FEDORA_USER),)
 upload: $(SRPM)
 	scp $(SRPM) $(FEDORA_USER)@fedorapeople.org:uploads/
 	@echo $(URL)
 
-koji: $(SRPM)
-	koji build --scratch rawhide $(SRPM)
-
 copr:
 	copr-cli build $(COPR_REPO) $(URL)
+endif
