@@ -17,7 +17,7 @@ verrel:
 srpm: $(SRPM)
 
 prep: $(NAME).spec
-	rpmbuild -bp $(NAME).spec
+	rpmbuild -bp --nodeps $(NAME).spec
 
 $(SRPM): $(NAME).spec
 	rpmbuild -bs $(NAME).spec
