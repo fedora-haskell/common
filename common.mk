@@ -6,7 +6,7 @@ NVR= $(shell rpmspec -q --qf "%{name}-%{version}-%{release}" --srpm $(NAME).spec
 
 SRPM = $(NVR).src.rpm
 
-URL = "http://$(FEDORA_USER).fedorapeople.org/uploads/$(SRPM)"
+URL = "http://$(FEDORA_USER).fedorapeople.org/copr/$(SRPM)"
 
 help:
 	@echo "targets: prep srpm local install-short upload copr koji verrel"
