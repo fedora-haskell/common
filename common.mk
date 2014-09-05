@@ -33,7 +33,7 @@ koji: $(SRPM)
 
 ifneq ($(FEDORA_USER),)
 upload: $(SRPM)
-	scp $(SRPM) $(FEDORA_USER)@fedorapeople.org:uploads/
+	scp $(SRPM) $(FEDORA_USER)@fedorapeople.org:copr/
 	@echo $(URL)
 
 copr:
