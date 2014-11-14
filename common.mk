@@ -9,7 +9,7 @@ SRPM = $(NVR).src.rpm
 URL = "http://$(FEDORA_USER).fedorapeople.org/copr/$(SRPM)"
 
 help:
-	@echo "targets: prep srpm local install-short upload copr koji verrel"
+	@echo "targets: prep srpm local mock install-short upload copr koji verrel"
 
 verrel:
 	@echo $(NVR)
@@ -30,6 +30,9 @@ install-short: $(NAME).spec
 
 koji: $(SRPM)
 	koji build --scratch rawhide $(SRPM)
+
+mock: $(SRPM)
+	mock $(SRPM)
 
 ifneq ($(FEDORA_USER),)
 upload: $(SRPM)
