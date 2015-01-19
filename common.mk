@@ -1,10 +1,12 @@
 -include ../common/local.mk
 
-NAME = $(shell rpmspec -q --qf "%{name}" --srpm *.spec)
+NAME := $(shell rpmspec -q --qf "%{name}" --srpm *.spec)
+VERSION := $(shell rpmspec -q --qf "%{version}" --srpm *.spec)
 
-NVR= $(shell rpmspec -q --qf "%{name}-%{version}-%{release}" --srpm $(NAME).spec)
+NVR := $(shell rpmspec -q --qf "%{name}-%{version}-%{release}" --srpm $(NAME).spec)
 
 SRPM = $(NVR).src.rpm
+TARBALL := $(NAME)-$(VERSION).tar.gz
 
 URL = "http://$(FEDORA_USER).fedorapeople.org/copr/$(SRPM)"
 
@@ -16,16 +18,19 @@ verrel:
 
 srpm: $(SRPM)
 
-prep: $(NAME).spec
+prep: $(NAME).spec $(TARBALL)
 	rpmbuild -bp --nodeps $(NAME).spec
 
-$(SRPM): $(NAME).spec
+$(SRPM): $(NAME).spec $(TARBALL)
 	rpmbuild -bs $(NAME).spec
 
-local: $(NAME).spec
+$(TARBALL):
+	wget -nv http://hackage.haskell.org/package/$(NAME)-$(VERSION)/$(TARBALL)
+
+local: $(NAME).spec $(TARBALL)
 	rpmbuild -ba $(NAME).spec
 
-install-short: $(NAME).spec
+install-short: $(NAME).spec $(TARBALL)
 	rpmbuild -bi --short-circuit $(NAME).spec
 
 koji: $(SRPM)
