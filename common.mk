@@ -6,7 +6,10 @@ VERSION := $(shell rpmspec -q --qf "%{version}" --srpm *.spec)
 NVR := $(shell rpmspec -q --qf "%{name}-%{version}-%{release}" --srpm $(NAME).spec)
 
 SRPM = $(NVR).src.rpm
+
+ifndef TARBALL
 TARBALL := $(NAME)-$(VERSION).tar.gz
+endif
 
 URL = "http://$(FEDORA_USER).fedorapeople.org/copr/$(SRPM)"
 
