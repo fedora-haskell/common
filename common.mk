@@ -8,7 +8,11 @@ NVR := $(shell rpmspec -q --qf "%{name}-%{version}-%{release}" --srpm $(NAME).sp
 SRPM = $(NVR).src.rpm
 
 ifndef TARBALL
+ifdef PKG
+TARBALL := $(PKG)-$(VERSION).tar.gz
+else
 TARBALL := $(NAME)-$(VERSION).tar.gz
+endif
 endif
 
 URL = "http://$(FEDORA_USER).fedorapeople.org/copr/$(SRPM)"
