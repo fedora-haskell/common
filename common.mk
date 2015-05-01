@@ -7,11 +7,13 @@ NVR := $(shell rpmspec -q --qf "%{name}-%{version}-%{release}" --srpm $(NAME).sp
 
 SRPM = $(NVR).src.rpm
 
+ifndef NO_TARBALL
 ifndef TARBALL
 ifdef PKG
 TARBALL := $(PKG)-$(VERSION).tar.gz
 else
 TARBALL := $(NAME)-$(VERSION).tar.gz
+endif
 endif
 endif
 
@@ -31,8 +33,10 @@ prep: $(NAME).spec $(TARBALL)
 $(SRPM): $(NAME).spec $(TARBALL)
 	rpmbuild -bs $(NAME).spec
 
+ifdef TARBALL
 $(TARBALL):
 	wget -nv http://hackage.haskell.org/package/$(NAME)-$(VERSION)/$(TARBALL)
+endif
 
 local: $(NAME).spec $(TARBALL)
 	rpmbuild -ba $(NAME).spec
