@@ -41,7 +41,7 @@ endif
 local: $(NAME).spec $(TARBALL)
 	rpmbuild -ba $(NAME).spec
 
-install-short: $(NAME).spec $(TARBALL)
+install: $(NAME).spec $(TARBALL)
 	rpmbuild -bi --short-circuit $(NAME).spec
 
 koji: $(SRPM)
@@ -53,6 +53,9 @@ mock: $(SRPM)
 ifneq ($(FEDORA_USER),)
 upload: $(SRPM)
 	scp $(SRPM) $(FEDORA_USER)@fedorapeople.org:copr/
+	@echo $(URL)
+
+url:
 	@echo $(URL)
 
 copr:
