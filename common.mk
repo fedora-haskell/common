@@ -17,10 +17,10 @@ endif
 endif
 endif
 
-URL = "http://$(FEDORA_USER).fedorapeople.org/copr/$(SRPM)"
+SRPM_URL = "http://$(FEDORA_USER).fedorapeople.org/copr/$(SRPM)"
 
 help:
-	@echo "targets: prep srpm local mock install-short upload copr koji verrel"
+	@echo "targets: prep srpm local mock install upload copr koji verrel"
 
 verrel:
 	@echo $(NVR)
@@ -53,11 +53,12 @@ mock: $(SRPM)
 ifneq ($(FEDORA_USER),)
 upload: $(SRPM)
 	scp $(SRPM) $(FEDORA_USER)@fedorapeople.org:copr/
-	@echo $(URL)
+	@echo $(SRPM_URL)
 
-url:
-	@echo $(URL)
+srpm-url:
+	@echo $(SRPM_URL)
 
 copr:
-	copr-cli build $(COPR_REPO) $(URL)
+	@echo "https://copr.fedoraproject.org/coprs/$(FEDORA_USER)/$(COPR_REPO)/builds/"
+	copr-cli build $(COPR_REPO) $(SRPM_URL)
 endif
