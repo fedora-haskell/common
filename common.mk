@@ -22,7 +22,7 @@ SRPM_URL = "http://$(FEDORA_USER).fedorapeople.org/copr/$(SRPM)"
 RPMBUILD = rpmbuild --define '_specdir $(PWD)' --define '_sourcedir $(PWD)'
 
 help:
-	@echo "targets: prep srpm local mock install upload copr koji verrel"
+	@echo "targets: prep srpm local mock short upload copr koji verrel"
 
 verrel:
 	@echo $(NVR)
@@ -43,7 +43,7 @@ endif
 local: $(NAME).spec $(TARBALL)
 	$(RPMBUILD) -ba $(NAME).spec
 
-install: $(NAME).spec $(TARBALL)
+short: $(NAME).spec $(TARBALL)
 	$(RPMBUILD) -bi --short-circuit $(NAME).spec
 
 koji: $(SRPM)
