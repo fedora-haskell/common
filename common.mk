@@ -50,7 +50,7 @@ koji: $(SRPM)
 	koji build --scratch rawhide $(SRPM)
 
 mock: $(SRPM)
-	mock $(SRPM)
+	mock -r fedora-rawhide-x86_64 $(SRPM)
 
 ifneq ($(FEDORA_USER),)
 upload: $(SRPM)
