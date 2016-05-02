@@ -7,6 +7,8 @@ NVR := $(shell rpmspec -q --qf "%{name}-%{version}-%{release}" --srpm $(NAME).sp
 
 SRPM = $(NVR).src.rpm
 
+PATCH := $(shell rpmspec -q --qf "%{patch}" --srpm $(NAME).spec)
+
 ifndef NO_TARBALL
 ifndef TARBALL
 ifdef PKG
@@ -32,7 +34,7 @@ srpm: $(SRPM)
 prep: $(NAME).spec $(TARBALL)
 	$(RPMBUILD) -bp --nodeps $(NAME).spec
 
-$(SRPM):
+$(SRPM): $(NAME).spec $(TARBALL) $(PATCH)
 	$(RPMBUILD) -bs $(NAME).spec
 
 ifdef TARBALL
