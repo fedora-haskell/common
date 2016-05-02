@@ -32,7 +32,7 @@ srpm: $(SRPM)
 prep: $(NAME).spec $(TARBALL)
 	$(RPMBUILD) -bp --nodeps $(NAME).spec
 
-$(SRPM): $(NAME).spec $(TARBALL)
+$(SRPM):
 	$(RPMBUILD) -bs $(NAME).spec
 
 ifdef TARBALL
