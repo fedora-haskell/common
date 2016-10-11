@@ -35,7 +35,7 @@ prep: $(NAME).spec $(TARBALL)
 	$(RPMBUILD) -bp --nodeps $(NAME).spec
 
 $(SRPM): $(NAME).spec $(TARBALL) $(PATCH)
-	$(RPMBUILD) -bs $(NAME).spec
+	$(RPMBUILD) --define 'dist %{nil}' -bs $(NAME).spec
 
 ifdef TARBALL
 $(TARBALL):
