@@ -7,7 +7,7 @@ NVR := $(shell rpmspec -q --qf "%{name}-%{version}-%{release}" --srpm $(NAME).sp
 
 SRPM = $(NVR).src.rpm
 
-PATCH := $(shell rpmspec -q --qf "%{patch}" --srpm $(NAME).spec)
+PATCH := $(shell rpmspec -q --qf "%{patch}" --srpm $(NAME).spec | grep -v "(none)")
 
 ifndef NO_TARBALL
 ifndef TARBALL
