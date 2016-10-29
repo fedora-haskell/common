@@ -3,7 +3,9 @@
 NAME := $(shell rpmspec -q --qf "%{name}" --srpm *.spec)
 VERSION := $(shell rpmspec -q --qf "%{version}" --srpm *.spec)
 
-NVR := $(shell rpmspec -q --qf "%{name}-%{version}-%{release}" --srpm $(NAME).spec)
+NODIST = --undefine dist
+
+NVR := $(shell rpmspec -q $(NODIST) --qf "%{name}-%{version}-%{release}" --srpm $(NAME).spec)
 
 SRPM = $(NVR).src.rpm
 
@@ -35,7 +37,7 @@ prep: $(NAME).spec $(TARBALL)
 	$(RPMBUILD) -bp --nodeps $(NAME).spec
 
 $(SRPM): $(NAME).spec $(TARBALL) $(PATCH)
-	$(RPMBUILD) --define 'dist %{nil}' -bs $(NAME).spec
+	$(RPMBUILD) $(NODIST) -bs $(NAME).spec
 
 ifdef TARBALL
 $(TARBALL):
