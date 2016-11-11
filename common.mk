@@ -14,11 +14,11 @@ PATCH := $(shell rpmspec -q --qf "%{patch}" --srpm $(NAME).spec | grep -v "(none
 ifndef NO_TARBALL
 ifndef TARBALL
 ifdef PKG
-NV := $(PKG)-$(VERSION)
-TARBALL := $(NV).tar.gz
+PV := $(PKG)-$(VERSION)
+TARBALL := $(PV).tar.gz
 else
-NV := $(NAME)-$(VERSION)
-TARBALL := $(NV).tar.gz
+PV := $(NAME)-$(VERSION)
+TARBALL := $(PV).tar.gz
 endif
 endif
 endif
@@ -43,7 +43,7 @@ $(SRPM): $(NAME).spec $(TARBALL) $(PATCH)
 
 ifdef TARBALL
 $(TARBALL):
-	wget -nv http://hackage.haskell.org/package/$(NV)/$(TARBALL)
+	wget -nv http://hackage.haskell.org/package/$(PV)/$(TARBALL)
 endif
 
 local: $(NAME).spec $(TARBALL)
