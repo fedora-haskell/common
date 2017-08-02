@@ -47,7 +47,7 @@ $(TARBALL):
 endif
 
 local: $(NAME).spec $(TARBALL)
-	$(RPMBUILD) -ba $(NAME).spec
+	$(RPMBUILD) -ba $(NAME).spec | tee .$(NVR).log
 
 short: $(NAME).spec $(TARBALL)
 	$(RPMBUILD) -bi --short-circuit $(NAME).spec
