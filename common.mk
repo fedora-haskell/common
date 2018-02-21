@@ -11,21 +11,11 @@ SRPM = $(NVR).src.rpm
 
 PATCH := $(shell rpmspec -q --qf "%{patch}" --srpm $(NAME).spec | grep -v "(none)")
 
-ifndef NO_TARBALL
-ifndef TARBALL
-ifdef PKG
-PV := $(PKG)-$(VERSION)
-TARBALL := $(PV).tar.gz
-else
-PV := $(NAME)-$(VERSION)
-TARBALL := $(PV).tar.gz
-endif
-endif
-endif
-
 SRPM_URL = "http://$(FEDORA_USER).fedorapeople.org/copr/$(SRPM)"
 
-RPMBUILD = rpmbuild --define '_specdir $(PWD)' --define '_sourcedir $(PWD)'
+RPMBUILD = rpmbuild --define "_specdir $(PWD)" --define "_sourcedir $(PWD)" --define "_builddir $(PWD)" --define "_srcrpmdir $(PWD)" --define "_rpmdir $(PWD)"
+
+SOURCES = $(shell spectool -l -S $(NAME).spec | awk '{ print $$2}' | xargs basename -a)
 
 help:
 	@echo "targets: prep srpm local mock short upload copr koji verrel"
@@ -35,28 +25,26 @@ verrel:
 
 srpm: $(SRPM)
 
-prep: $(NAME).spec $(TARBALL)
+prep: $(NAME).spec $(SOURCES)
 	$(RPMBUILD) -bp --nodeps $(NAME).spec
 
-$(SRPM): $(NAME).spec $(TARBALL) $(PATCH)
+$(SRPM): $(NAME).spec $(SOURCES) $(PATCH)
 	$(RPMBUILD) $(NODIST) -bs $(NAME).spec
 
-ifdef TARBALL
-$(TARBALL):
-	wget -nv http://hackage.haskell.org/package/$(PV)/$(TARBALL)
-endif
+$(SOURCES):
+	spectool -g -S $(NAME).spec
 
-local: $(NAME).spec $(TARBALL)
+local: $(NAME).spec $(SOURCES)
 	$(RPMBUILD) -ba $(NAME).spec | tee .$(NVR).log
 
-short: $(NAME).spec $(TARBALL)
+short: $(NAME).spec
 	$(RPMBUILD) -bi --short-circuit $(NAME).spec
 
 koji: $(SRPM)
 	koji build --scratch rawhide $(SRPM)
 
 mock: $(SRPM)
-	mock -r fedora-rawhide-x86_64 $(SRPM)
+	mock -r fedora-rawhide-x86_64 --enable-network $(MOCK_OPTS) $(SRPM)
 
 ifneq ($(FEDORA_USER),)
 upload: $(SRPM)
